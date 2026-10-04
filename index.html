@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بصمة | عرض تقديمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================ */
+        /* RESET + BASE */
+        /* ============================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --orange: #E87A20;
+            --orange-dark: #D46A1A;
+            --orange-light: #F5A623;
+            --brown: #8B5A2B;
+            --brown-dark: #6B4226;
+            --brown-light: #C49A6C;
+            --cream: #FDF5E6;
+            --cream-dark: #F5EBD9;
+            --teal: #17A2B8;
+            --teal-dark: #138496;
+            --teal-light: #20C9E0;
+            --purple: #9C27B0;
+            --purple-dark: #7B1FA2;
+            --purple-light: #BA68C8;
+            --green: #28A745;
+            --white: #FFFFFF;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Cairo', sans-serif;
+            background: var(--cream);
+            color: var(--brown-dark);
+        }
+
+        /* ============================================ */
+        /* ANIMATIONS */
+        /* ============================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+        }
+        @keyframes arrowPulse {
+            0%, 100% { transform: translateX(0); opacity: 0.6; }
+            50% { transform: translateX(-4px); opacity: 1; }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 4px 16px rgba(232, 122, 32, 0.25); }
+            50% { box-shadow: 0 8px 28px rgba(232, 122, 32, 0.5); }
+        }
+        @keyframes ripple {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Applied when slide becomes active */
+        .slide.active .anim-up { animation: fadeUp 0.6s ease both; }
+        .slide.active .anim-in { animation: fadeIn 0.6s ease both; }
+        .slide.active .anim-right { animation: slideRight 0.6s ease both; }
+        .slide.active .anim-left { animation: slideLeft 0.6s ease both; }
+        .slide.active .anim-scale { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .slide.active .anim-float { animation: float 3s ease-in-out infinite; }
+        .slide.active .anim-pulse { animation: pulse 2.4s ease-in-out infinite; }
+        .slide.active .anim-glow { animation: glow 2.5s ease-in-out infinite; }
+        .slide.active .anim-rotate { animation: slowRotate 24s linear infinite; }
+
+        .d-1 { animation-delay: 0.08s !important; }
+        .d-2 { animation-delay: 0.16s !important; }
+        .d-3 { animation-delay: 0.24s !important; }
+        .d-4 { animation-delay: 0.32s !important; }
+        .d-5 { animation-delay: 0.40s !important; }
+        .d-6 { animation-delay: 0.48s !important; }
+        .d-7 { animation-delay: 0.56s !important; }
+        .d-8 { animation-delay: 0.64s !important; }
+
+        /* ============================================ */
+        /* LAYOUT */
+        /* ============================================ */
+        .app {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(196, 154, 108, 0.25);
+            z-index: 20;
+            flex-shrink: 0;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand img {
+            height: 40px; width: 40px;
+            object-fit: contain;
+        }
+        .brand h1 { font-size: 16px; font-weight: 800; color: var(--orange); line-height: 1.1; }
+        .brand p { font-size: 11px; color: var(--brown); font-weight: 600; }
+
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .icon-btn {
+            width: 36px; height: 36px;
+            border: 1px solid rgba(196, 154, 108, 0.4);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--brown-dark);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background: var(--cream); }
+        .counter {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(232, 122, 32, 0.1);
+            color: var(--orange);
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(232, 122, 32, 0.2);
+        }
+
+        .progress {
+            height: 4px;
+            background: rgba(196, 154, 108, 0.2);
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .progress > div {
+            height: 100%;
+            background: var(--orange);
+            transition: width 0.4s ease;
+            width: 8.33%;
+        }
+
+        main {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        footer {
+            padding: 12px 24px;
+            background: var(--white);
+            border-top: 1px solid rgba(196, 154, 108, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+            flex-shrink: 0;
+        }
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .nav-btn.prev {
+            background: var(--cream);
+            color: var(--brown-dark);
+            border: 1px solid rgba(196, 154, 108, 0.4);
+        }
+        .nav-btn.prev:hover { background: rgba(196, 154, 108, 0.15); }
+        .nav-btn.next {
+            background: var(--orange);
+            color: white;
+            box-shadow: 0 4px 14px rgba(232, 122, 32, 0.3);
+        }
+        .nav-btn.next:hover { background: var(--orange-dark); }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(196, 154, 108, 0.4);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s;
+        }
+        .dot.active {
+            background: var(--orange);
+            width: 24px;
+            border-radius: 5px;
+        }
+
+        /* ============================================ */
+        /* SLIDE BUILDING BLOCKS */
+        /* ============================================ */
+        .slide-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .slide-header .bar {
+            width: 6px; height: 40px;
+            background: var(--orange);
+            border-radius: 3px;
+        }
+        .slide-header h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 900;
+            color: var(--brown-dark);
+            line-height: 1.2;
+        }
+        .slide-header p {
+            font-size: 14px;
+            color: var(--brown);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1.5px solid rgba(196, 154, 108, 0.3);
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 3-in-row grid for cards */
+        .grid-3x2 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        /* ============================================ */
+        /* FLOW MAP */
+        /* ============================================ */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            min-width: 100px;
+            min-height: 80px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.25s;
+        }
+        .flow-node:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        }
+        .flow-node i {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--brown-light);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .scroll-y {
+            flex: 1;
+            overflow-y: auto;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+        .scroll-y::-webkit-scrollbar { width: 6px; }
+        .scroll-y::-webkit-scrollbar-thumb {
+            background: var(--brown-light);
+            border-radius: 4px;
+        }
+
+        /* ============================================ */
+        /* RESPONSIVE */
+        /* ============================================ */
+        @media (max-width: 992px) {
+            .grid-3x2 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            header { padding: 10px 14px; }
+            .brand h1 { font-size: 14px; }
+            .brand p { font-size: 10px; }
+            .brand img { height: 32px; width: 32px; }
+            main { padding: 12px; }
+            .slide { top: 12px; left: 12px; right: 12px; bottom: 12px; }
+            footer { padding: 10px 14px; }
+            .nav-btn { padding: 8px 14px; font-size: 13px; }
+            .counter { padding: 4px 10px; font-size: 12px; }
+            .slide-header h2 { font-size: 20px; }
+            .slide-header .bar { height: 32px; }
+            .flow-node { min-width: 80px; min-height: 70px; padding: 8px 10px; font-size: 10.5px; }
+            .flow-node i { font-size: 15px; margin-bottom: 4px; }
+            .flow-arrow { font-size: 15px; }
+            .grid-3x2 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .hide-sm { display: none !important; }
+            .slide-header h2 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ============================================ -->
+    <!-- HEADER -->
+    <!-- ============================================ -->
+    <header>
+        <div class="brand">
+            <img src="logo.png" alt="بصمة"
+                 onerror="this.style.display='none'" />
+            <div>
+                <h1>منصة بصمة</h1>
+                <p>عرض تقديمي</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleFullscreen()" title="ملء الشاشة">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+            <span class="counter" id="slideCounter">1 / 12</span>
+        </div>
+    </header>
+
+    <div class="progress"><div id="progressBar"></div></div>
+
+    <!-- ============================================ -->
+    <!-- MAIN -->
+    <!-- ============================================ -->
+    <main>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 1 — TITLE -->
+        <!-- ============================================ -->
+        <section class="slide active" data-title="العنوان">
+            <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+                <div style="text-align:center; max-width: 780px; width:100%;">
+
+                    <!-- LOGO -->
+                    <img
+                        src="logo.png"
+                        alt="بصمة"
+                        class="anim-scale"
+                        style="
+                            width: clamp(120px, 15vw, 175px);
+                            height: auto;
+                            object-fit: contain;
+                            display: block;
+                            margin: 0 auto 20px;
+                        "
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                    />
+                    <div
+                        class="anim-scale"
+                        style="
+                            display: none;
+                            width: clamp(120px, 15vw, 175px);
+                            height: clamp(120px, 15vw, 175px);
+                            margin: 0 auto 20px;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--orange);
+                            font-size: clamp(80px, 11vw, 120px);
+                            font-weight: 900;
+                            font-family: 'Cairo', sans-serif;
+                            line-height: 1;
+                        "
+                    >
+                        ب
+                    </div>
+
+                    <!-- Tag pill -->
+                    <div
+                        class="anim-up d-1"
+                        style="
+                            display:inline-block;
+                            padding:8px 18px;
+                            background: rgba(232,122,32,0.1);
+                            border:1px solid rgba(232,122,32,0.25);
+                            border-radius: 30px;
+                            color: var(--orange);
+                            font-weight: 800;
+                            font-size:14px;
+                            margin-bottom: 16px;
+                        "
+                    >
+                        عرض الفكرة والرؤية
+                    </div>
+
+                    <h1
+                        class="anim-up d-2"
+                        style="
+                            font-size: clamp(40px, 6vw, 72px);
+                            font-weight: 900;
+                            color: var(--brown-dark);
+                            line-height: 1.05;
+                            margin-bottom: 12px;
+                        "
+                    >
+                        بصمة
+                    </h1>
+
+                    <p
+                        class="anim-up d-3"
+                        style="
+                            font-size: clamp(16px, 2vw, 22px);
+                            font-weight: 700;
+                            color: var(--orange);
+                            margin-bottom: 40px;
+                            line-height: 1.5;
+                        "
+                    >
+                        منصة التكافل المجتمعي لأهل غزة
+                    </p>
+
+                    <div
+                        class="anim-up d-4"
+                        style="
+                            display:inline-flex;
+                            align-items:center;
+                            gap:14px;
+                            padding: 18px 30px;
+                            background: var(--white);
+                            border: 2px solid rgba(232,122,32,0.3);
+                            border-radius: 20px;
+                            box-shadow: 0 8px 28px rgba(232,122,32,0.12);
+                        "
+                    >
+                        <div
+                            style="
+                                width:52px;
+                                height:52px;
+                                background: linear-gradient(135deg, var(--orange), var(--orange-light));
+                                border-radius:50%;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                color:white;
+                                font-size:20px;
+                                flex-shrink:0;
+                            "
+                        >
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div style="text-align:right;">
+                            <div
+                                style="
+                                    font-size:11px;
+                                    color: var(--brown);
+                                    font-weight:700;
+                                    letter-spacing:0.5px;
+                                "
+                            >
+                                إعداد ومشاركة
+                            </div>
+                            <div
+                                style="
+                                    font-size:16px;
+                                    font-weight:900;
+                                    color: var(--brown-dark);
+                                "
+                            >
+                                فريق بصمة
+                            </div>
+                            <div
+                                style="
+                                    font-size:12px;
+                                    color: var(--orange);
+                                    font-weight:700;
+                                "
+                            >
+                                بقيادة المهندس حسن سمور
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 2 — AGENDA (3x2 grid, full width) -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="جدول الأعمال">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>جدول الأعمال</h2>
+                    <p>نظرة سريعة على ما سنتناوله في هذا العرض</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="grid-3x2">
+
+                    <div class="card anim-up d-1" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">01</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">الفكرة والمشكلة</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">لماذا وُجدت بصمة؟ وما المشكلة التي تحلها؟</div>
+                        </div>
+                    </div>
+
+                    <div class="card anim-up d-2" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--teal), var(--teal-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">02</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">الهدف والرسالة</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">ماذا نطمح لتحقيقه من خلال المنصة</div>
+                        </div>
+                    </div>
+
+                    <div class="card anim-up d-3" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--purple), var(--purple-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">03</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">الأركان الثلاثة</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">تبادل، صندوق بصمة، ومنشورات المجتمع</div>
+                        </div>
+                    </div>
+
+                    <div class="card anim-up d-4" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--brown), var(--brown-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">04</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">رحلة المستخدم</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">خريطة كاملة لكل مسار في المنصة</div>
+                        </div>
+                    </div>
+
+                    <div class="card anim-up d-5" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--orange-dark), var(--orange)); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">05</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">الفريق والتقنيات</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">من يبني بصمة وكيف</div>
+                        </div>
+                    </div>
+
+                    <div class="card anim-up d-6" style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:52px; height:52px; background: linear-gradient(135deg, var(--green), #4FCB6E); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:900; flex-shrink:0;">06</div>
+                        <div>
+                            <div style="font-weight:900; color: var(--brown-dark); font-size:15px; margin-bottom:2px;">الأثر والخطوات القادمة</div>
+                            <div style="font-size:12px; color: var(--brown); font-weight:600;">ما نطمح إليه وما نعمل عليه</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 3 — THE IDEA -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="الفكرة">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>الفكرة الأساسية</h2>
+                    <p>من التشتت إلى بصمة — قصة المنصة والرؤية المجتمعية</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div style="display:grid; grid-template-columns: 1fr; gap: 16px;">
+
+                    <div class="card anim-up d-1" style="padding: 22px;">
+                        <p style="font-size: 15px; color: var(--brown-dark); line-height: 2; text-align: justify; font-weight: 500;">
+                            في غزة، حيث تتشابك الحاجة مع الكرامة، لاحظنا أن الناس يتشتّتون في نشر إعلاناتهم بين عشرات المجموعات على مواقع التواصل الاجتماعي، فلا يجد الباحث عن خدمة مكاناً واحداً موثوقاً، ولا يجد صاحب الكفاءة جمهوراً يصل إليه بسهولة. وحين تكون الثقة غائبة، يفقد العطاء طريقه ويصبح التعاون مجازفة.
+                            <br/><br/>
+                            ومن رحم هذه الحاجة، وُلدت <strong style="color: var(--orange);">بصمة</strong>: منصة واحدة تجمع كل هؤلاء في مكان واحد آمن، منظّم، وموثوق — ليعرض كل فرد ما يجيده، ويجد كل محتاج يداً ممدودة، ويصل العطاء إلى مستحقيه.
+                        </p>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px;">
+
+                        <div class="card anim-scale d-2" style="padding: 12px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(232,122,32,0.05), rgba(23,162,184,0.05));">
+                            <img src="story-vision.png" alt="من التشتت إلى بصمة"
+                                 style="width: 100%; max-width: 100%; height: auto; max-height: 380px; object-fit: contain; border-radius: 12px;"
+                                 onerror="this.parentElement.innerHTML='<div style=\'padding:60px 20px; text-align:center; color:var(--brown); font-weight:700;\'><i class=\'fa-solid fa-image\' style=\'font-size:48px; opacity:0.3; display:block; margin-bottom:12px;\'></i>أضف صورة story-vision.png هنا</div>'" />
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+
+                            <div class="card anim-right d-3" style="border-left: 4px solid #DC3545; padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <i class="fa-solid fa-circle-exclamation" style="color: #DC3545; font-size: 16px;"></i>
+                                    <span style="font-weight: 900; color: #DC3545; font-size: 14px;">المشكلة الحالية</span>
+                                </div>
+                                <ul style="list-style: none; font-size: 13px; color: var(--gray-700); line-height: 1.9;">
+                                    <li>• تشتت الإعلانات بين عشرات المنصات</li>
+                                    <li>• غياب الثقة بين الأطراف</li>
+                                    <li>• لا يوجد نظام تقييم أو توثيق</li>
+                                    <li>• ضياع العطاء دون وصول لمستحقيه</li>
+                                </ul>
+                            </div>
+
+                            <div class="card anim-right d-4" style="border-left: 4px solid var(--green); padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <i class="fa-solid fa-circle-check" style="color: var(--green); font-size: 16px;"></i>
+                                    <span style="font-weight: 900; color: var(--green); font-size: 14px;">الحل — بصمة</span>
+                                </div>
+                                <ul style="list-style: none; font-size: 13px; color: var(--gray-700); line-height: 1.9;">
+                                    <li>• منصة واحدة تجمع الجميع</li>
+                                    <li>• توثيق هوية + شارة موثق</li>
+                                    <li>• نظام تقييم يبني الثقة</li>
+                                    <li>• قناة تبرعات شفافة وموثقة</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 4 — THREE PILLARS -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="الأركان الثلاثة">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>الأركان الثلاثة للمنصة</h2>
+                    <p>ثلاثة أقسام متكاملة تخدم كل جوانب المجتمع</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; padding-top: 8px;">
+
+                    <div class="card anim-up d-1" style="text-align:center; padding: 28px 22px; border-top: 4px solid var(--orange);">
+                        <div class="anim-float" style="width: 90px; height: 90px; margin: 0 auto 16px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-radius: 26px; display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; box-shadow: 0 10px 26px rgba(232,122,32,0.35);">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </div>
+                        <h3 style="font-size: 22px; font-weight: 900; color: var(--brown-dark); margin-bottom: 10px;">تبادل الخدمات</h3>
+                        <p style="font-size: 14px; color: var(--gray-700); line-height: 1.85; font-weight: 500;">
+                            المكان الذي يجد فيه كل فرد ما يحتاجه — خدمات، سلع، ومقايضات بين أبناء المجتمع دون وسيط.
+                        </p>
+                    </div>
+
+                    <div class="card anim-up d-2" style="text-align:center; padding: 28px 22px; border-top: 4px solid var(--teal);">
+                        <div class="anim-float d-1" style="width: 90px; height: 90px; margin: 0 auto 16px; background: linear-gradient(135deg, var(--teal), var(--teal-light)); border-radius: 26px; display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; box-shadow: 0 10px 26px rgba(23,162,184,0.35);">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <h3 style="font-size: 22px; font-weight: 900; color: var(--brown-dark); margin-bottom: 10px;">صندوق بصمة</h3>
+                        <p style="font-size: 14px; color: var(--gray-700); line-height: 1.85; font-weight: 500;">
+                            قناة تبرعات آمنة وموثقة. المستفيد يرفع طلبه بفيديو، والمتبرعون يصلون إليه عبر المنصة.
+                        </p>
+                    </div>
+
+                    <div class="card anim-up d-3" style="text-align:center; padding: 28px 22px; border-top: 4px solid var(--purple);">
+                        <div class="anim-float d-2" style="width: 90px; height: 90px; margin: 0 auto 16px; background: linear-gradient(135deg, var(--purple), var(--purple-light)); border-radius: 26px; display: flex; align-items: center; justify-content: center; color: white; font-size: 36px; box-shadow: 0 10px 26px rgba(156,39,176,0.35);">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <h3 style="font-size: 22px; font-weight: 900; color: var(--brown-dark); margin-bottom: 10px;">منشورات المجتمع</h3>
+                        <p style="font-size: 14px; color: var(--gray-700); line-height: 1.85; font-weight: 500;">
+                            منصة لنشر التحذيرات والمفقودات والموجودات وأخبار الحي — صوت المجتمع الذي يحمي أفراده.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 5 — USER JOURNEY -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="رحلة المستخدم">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>خريطة رحلة المستخدم</h2>
+                    <p>من الزيارة الأولى حتى تحقيق الهدف</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="card anim-up d-1" style="padding: 22px; margin-bottom: 14px;">
+
+                    <div style="margin-bottom: 22px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span style="padding: 5px 14px; background: rgba(139,90,43,0.15); color: var(--brown-dark); font-size: 12px; font-weight: 800; border-radius: 20px;">المرحلة 1</span>
+                            <span style="font-weight: 900; color: var(--brown-dark); font-size: 15px;">الزائر (Guest)</span>
+                        </div>
+                        <div class="flow-row">
+                            <div class="flow-node anim-scale d-2" style="background: var(--cream); border: 2px solid rgba(196,154,108,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-house" style="color: var(--orange);"></i>
+                                الصفحة الرئيسية
+                            </div>
+                            <div class="flow-arrow anim-pulse"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-3" style="background: var(--cream); border: 2px solid rgba(196,154,108,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-magnifying-glass" style="color: var(--orange);"></i>
+                                تصفح الخدمات
+                            </div>
+                            <div class="flow-arrow anim-pulse d-1"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-4" style="background: var(--cream); border: 2px solid rgba(196,154,108,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-filter" style="color: var(--orange);"></i>
+                                الفلترة والبحث
+                            </div>
+                            <div class="flow-arrow anim-pulse d-2"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-5" style="background: var(--cream); border: 2px solid rgba(196,154,108,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-circle-info" style="color: var(--orange);"></i>
+                                تفاصيل الخدمة
+                            </div>
+                            <div class="flow-arrow anim-pulse d-3"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-6 anim-glow" style="background: linear-gradient(135deg, rgba(232,122,32,0.15), rgba(232,122,32,0.05)); border: 2px solid var(--orange); color: var(--orange);">
+                                <i class="fa-solid fa-lock" style="color: var(--orange);"></i>
+                                إخفاء الواتساب
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin: 12px 0;">
+                        <div class="anim-float" style="width: 44px; height: 44px; background: var(--orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(232,122,32,0.3);">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 12px 0 22px;">
+                        <div class="anim-glow" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); color: white; border-radius: 16px; font-weight: 900; font-size: 15px; box-shadow: 0 10px 28px rgba(232,122,32,0.35);">
+                            <i class="fa-solid fa-user-plus"></i>
+                            التسجيل / تسجيل الدخول
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span style="padding: 5px 14px; background: rgba(232,122,32,0.15); color: var(--orange); font-size: 12px; font-weight: 800; border-radius: 20px;">المرحلة 2</span>
+                            <span style="font-weight: 900; color: var(--brown-dark); font-size: 15px;">المستخدم المسجل</span>
+                        </div>
+                        <div class="flow-row">
+                            <div class="flow-node anim-scale d-1" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-id-card" style="color: var(--orange);"></i>
+                                رفع وثيقة الهوية
+                            </div>
+                            <div class="flow-arrow anim-pulse"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-2" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-circle-check" style="color: var(--green);"></i>
+                                موافقة الإدارة
+                            </div>
+                            <div class="flow-arrow anim-pulse d-1"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-3" style="background: rgba(40,167,69,0.1); border: 2px solid var(--green); color: var(--green);">
+                                <i class="fa-solid fa-shield-halved" style="color: var(--green);"></i>
+                                شارة موثق
+                            </div>
+                            <div class="flow-arrow anim-pulse d-2"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-4" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-plus-circle" style="color: var(--orange);"></i>
+                                نشر خدمة أو طلب
+                            </div>
+                            <div class="flow-arrow anim-pulse d-3"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-5" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-brands fa-whatsapp" style="color: var(--green);"></i>
+                                تواصل عبر واتساب
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin: 20px 0 0;">
+                        <div class="anim-glow" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; background: linear-gradient(135deg, rgba(232,122,32,0.1), rgba(255,193,7,0.1)); border: 2px solid rgba(232,122,32,0.4); border-radius: 14px; font-weight: 800; color: var(--brown-dark); font-size: 13px;">
+                            <i class="fa-solid fa-star" style="color: var(--orange-light);"></i>
+                            التقييم بعد التعامل ← بناء السمعة ← ثقة المجتمع
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 6 — BASMA FUND FLOW -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="رحلة صندوق بصمة">
+            <div class="slide-header anim-right">
+                <div class="bar" style="background: var(--teal);"></div>
+                <div>
+                    <h2 style="color: var(--teal-dark);">رحلة صندوق بصمة</h2>
+                    <p>كيف تتحول المساعدة من نية إلى إنجاز موثّق</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="card anim-up d-1" style="padding: 22px; background: linear-gradient(135deg, rgba(23,162,184,0.04), rgba(23,162,184,0.01)); border-color: rgba(23,162,184,0.3);">
+
+                    <div style="margin-bottom: 22px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span style="padding: 5px 14px; background: var(--teal); color: white; font-size: 12px; font-weight: 800; border-radius: 20px;">المستفيد</span>
+                            <span style="font-size: 12px; color: var(--gray-500); font-weight: 600;">(مستخدم موثق)</span>
+                        </div>
+                        <div class="flow-row">
+                            <div class="flow-node anim-scale d-2" style="background: var(--white); border: 2px solid rgba(23,162,184,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-video" style="color: var(--teal);"></i>
+                                رفع فيديو
+                            </div>
+                            <div class="flow-arrow anim-pulse"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-3" style="background: var(--white); border: 2px solid rgba(23,162,184,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-file-shield" style="color: var(--teal);"></i>
+                                بيانات مشفّرة
+                            </div>
+                            <div class="flow-arrow anim-pulse d-1"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-4" style="background: var(--white); border: 2px solid rgba(23,162,184,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-paper-plane" style="color: var(--teal);"></i>
+                                إرسال الطلب
+                            </div>
+                            <div class="flow-arrow anim-pulse d-2"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-5 anim-glow" style="background: rgba(23,162,184,0.15); border: 2px solid var(--teal); color: var(--teal-dark);">
+                                <i class="fa-solid fa-hourglass-half" style="color: var(--teal);"></i>
+                                قيد المراجعة
+                            </div>
+                            <div class="flow-arrow anim-pulse d-3"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-6" style="background: var(--white); border: 2px solid rgba(23,162,184,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-check-circle" style="color: var(--green);"></i>
+                                نشر علني
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin: 12px 0;">
+                        <div class="anim-float d-1" style="width: 44px; height: 44px; background: var(--teal); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(23,162,184,0.3);">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 22px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span style="padding: 5px 14px; background: var(--orange); color: white; font-size: 12px; font-weight: 800; border-radius: 20px;">المتبرع</span>
+                            <span style="font-size: 12px; color: var(--gray-500); font-weight: 600;">(زائر أو مستخدم)</span>
+                        </div>
+                        <div class="flow-row">
+                            <div class="flow-node anim-scale d-1" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-eye-slash" style="color: var(--orange);"></i>
+                                صورة ضبابية
+                            </div>
+                            <div class="flow-arrow anim-pulse"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-2" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-paper-plane" style="color: var(--orange);"></i>
+                                إرسال استفسار
+                            </div>
+                            <div class="flow-arrow anim-pulse d-1"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-3 anim-glow" style="background: rgba(232,122,32,0.15); border: 2px solid var(--orange); color: var(--orange);">
+                                <i class="fa-solid fa-link" style="color: var(--orange);"></i>
+                                رابط فيديو لمرة واحدة
+                            </div>
+                            <div class="flow-arrow anim-pulse d-2"><i class="fa-solid fa-arrow-left"></i></div>
+                            <div class="flow-node anim-scale d-4" style="background: var(--white); border: 2px solid rgba(232,122,32,0.4); color: var(--brown-dark);">
+                                <i class="fa-solid fa-handshake" style="color: var(--orange);"></i>
+                                تنسيق مع المنصة
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center;">
+                        <div class="anim-glow d-1" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: linear-gradient(135deg, rgba(255,193,7,0.15), rgba(232,122,32,0.1)); border: 2px solid rgba(232,122,32,0.4); border-radius: 14px; font-weight: 900; color: var(--brown-dark); font-size: 14px;">
+                            <i class="fa-solid fa-trophy" style="color: var(--orange-light);"></i>
+                            إنجاز موثّق يبقى في صفحة إنجازات التبرعات
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 7 — COMMUNITY FLOW -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="رحلة منشورات المجتمع">
+            <div class="slide-header anim-right">
+                <div class="bar" style="background: var(--purple);"></div>
+                <div>
+                    <h2 style="color: var(--purple-dark);">رحلة منشورات المجتمع</h2>
+                    <p>من إنشاء المنشور حتى وصوله لكل أفراد المجتمع</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="card anim-up d-1" style="padding: 22px; background: linear-gradient(135deg, rgba(156,39,176,0.04), rgba(156,39,176,0.01)); border-color: rgba(156,39,176,0.3);">
+
+                    <div class="flow-row" style="margin-bottom: 22px;">
+                        <div class="flow-node anim-scale d-1" style="background: var(--white); border: 2px solid rgba(156,39,176,0.4); color: var(--brown-dark);">
+                            <i class="fa-solid fa-id-card" style="color: var(--purple);"></i>
+                            مستخدم موثق
+                        </div>
+                        <div class="flow-arrow anim-pulse"><i class="fa-solid fa-arrow-left"></i></div>
+                        <div class="flow-node anim-scale d-2" style="background: var(--white); border: 2px solid rgba(156,39,176,0.4); color: var(--brown-dark);">
+                            <i class="fa-solid fa-pen-to-square" style="color: var(--purple);"></i>
+                            إنشاء منشور
+                        </div>
+                        <div class="flow-arrow anim-pulse d-1"><i class="fa-solid fa-arrow-left"></i></div>
+                        <div class="flow-node anim-scale d-3" style="background: var(--white); border: 2px solid rgba(156,39,176,0.4); color: var(--brown-dark);">
+                            <i class="fa-solid fa-tags" style="color: var(--purple);"></i>
+                            تحديد النوع
+                        </div>
+                        <div class="flow-arrow anim-pulse d-2"><i class="fa-solid fa-arrow-left"></i></div>
+                        <div class="flow-node anim-scale d-4 anim-glow" style="background: rgba(156,39,176,0.15); border: 2px solid var(--purple); color: var(--purple-dark);">
+                            <i class="fa-solid fa-hourglass-half" style="color: var(--purple);"></i>
+                            مراجعة الإدارة
+                        </div>
+                        <div class="flow-arrow anim-pulse d-3"><i class="fa-solid fa-arrow-left"></i></div>
+                        <div class="flow-node anim-scale d-5" style="background: var(--white); border: 2px solid rgba(156,39,176,0.4); color: var(--brown-dark);">
+                            <i class="fa-solid fa-check-circle" style="color: var(--green);"></i>
+                            نشر علني
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; margin: 16px 0;">
+                        <div class="anim-float" style="width: 44px; height: 44px; background: var(--purple); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(156,39,176,0.3);">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                        <div class="anim-up d-1" style="text-align: center; padding: 18px 12px; background: var(--white); border: 2px solid rgba(220,53,69,0.3); border-radius: 16px;">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: #DC3545; font-size: 26px; margin-bottom: 8px; display: block;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 14px;">تحذيرات عاجلة</div>
+                        </div>
+                        <div class="anim-up d-2" style="text-align: center; padding: 18px 12px; background: var(--white); border: 2px solid rgba(255,193,7,0.4); border-radius: 16px;">
+                            <i class="fa-solid fa-magnifying-glass-location" style="color: #B8860B; font-size: 26px; margin-bottom: 8px; display: block;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 14px;">مفقودات / موجودات</div>
+                        </div>
+                        <div class="anim-up d-3" style="text-align: center; padding: 18px 12px; background: var(--white); border: 2px solid rgba(23,162,184,0.3); border-radius: 16px;">
+                            <i class="fa-solid fa-newspaper" style="color: var(--teal); font-size: 26px; margin-bottom: 8px; display: block;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 14px;">أخبار الحي</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 8 — TEAM -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="فريق بصمة">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>فريق بصمة</h2>
+                    <p>أربعة كفاءات شابة تبني المنصة من الصفر</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+
+                        <div class="card anim-scale d-1" style="text-align: center; padding: 24px 20px; border: 2px solid var(--orange); position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(232,122,32,0.06), rgba(232,122,32,0.01));">
+                            <div style="position: absolute; top: 0; left: 0; padding: 6px 14px; background: var(--orange); color: white; font-size: 11px; font-weight: 800; border-radius: 0 0 12px 0;">قائد الفريق</div>
+                            <div class="anim-float" style="width: 84px; height: 84px; margin: 8px auto 14px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; box-shadow: 0 10px 24px rgba(232,122,32,0.35);">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 900; color: var(--brown-dark); margin-bottom: 6px;">حسن سمور</h3>
+                            <p style="font-size: 13px; color: var(--orange); font-weight: 800; margin-bottom: 12px;">Team Lead · Backend & Frontend</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                                <span style="padding: 4px 12px; background: rgba(232,122,32,0.12); color: var(--orange); border-radius: 12px; font-size: 11px; font-weight: 700;">قيادة المشروع</span>
+                                <span style="padding: 4px 12px; background: rgba(232,122,32,0.12); color: var(--orange); border-radius: 12px; font-size: 11px; font-weight: 700;">Backend</span>
+                                <span style="padding: 4px 12px; background: rgba(232,122,32,0.12); color: var(--orange); border-radius: 12px; font-size: 11px; font-weight: 700;">Frontend</span>
+                                <span style="padding: 4px 12px; background: rgba(232,122,32,0.12); color: var(--orange); border-radius: 12px; font-size: 11px; font-weight: 700;">UI/UX Support</span>
+                            </div>
+                        </div>
+
+                        <div class="card anim-scale d-2" style="text-align: center; padding: 24px 20px; border: 2px solid rgba(23,162,184,0.4); position: relative; overflow: hidden;">
+                            <div class="anim-float d-1" style="width: 84px; height: 84px; margin: 8px auto 14px; background: linear-gradient(135deg, var(--teal), var(--teal-light)); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; box-shadow: 0 10px 24px rgba(23,162,184,0.35);">
+                                <i class="fa-solid fa-mobile-screen"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 900; color: var(--brown-dark); margin-bottom: 6px;">أحمد حميد</h3>
+                            <p style="font-size: 13px; color: var(--teal); font-weight: 800; margin-bottom: 12px;">Flutter Mobile Developer</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                                <span style="padding: 4px 12px; background: rgba(23,162,184,0.12); color: var(--teal); border-radius: 12px; font-size: 11px; font-weight: 700;">تطبيق Android</span>
+                                <span style="padding: 4px 12px; background: rgba(23,162,184,0.12); color: var(--teal); border-radius: 12px; font-size: 11px; font-weight: 700;">تطبيق iOS</span>
+                                <span style="padding: 4px 12px; background: rgba(23,162,184,0.12); color: var(--teal); border-radius: 12px; font-size: 11px; font-weight: 700;">دعم Offline</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+
+                        <div class="card anim-scale d-3" style="text-align: center; padding: 24px 20px; border: 2px solid rgba(156,39,176,0.4); position: relative; overflow: hidden;">
+                            <div class="anim-float d-2" style="width: 84px; height: 84px; margin: 8px auto 14px; background: linear-gradient(135deg, var(--purple), var(--purple-light)); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; box-shadow: 0 10px 24px rgba(156,39,176,0.35);">
+                                <i class="fa-solid fa-paintbrush"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 900; color: var(--brown-dark); margin-bottom: 6px;">محمد سكافي</h3>
+                            <p style="font-size: 13px; color: var(--purple); font-weight: 800; margin-bottom: 12px;">UI/UX Designer</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                                <span style="padding: 4px 12px; background: rgba(156,39,176,0.12); color: var(--purple); border-radius: 12px; font-size: 11px; font-weight: 700;">تصميم الواجهات</span>
+                                <span style="padding: 4px 12px; background: rgba(156,39,176,0.12); color: var(--purple); border-radius: 12px; font-size: 11px; font-weight: 700;">تجربة المستخدم</span>
+                                <span style="padding: 4px 12px; background: rgba(156,39,176,0.12); color: var(--purple); border-radius: 12px; font-size: 11px; font-weight: 700;">نظام التصميم</span>
+                            </div>
+                        </div>
+
+                        <div class="card anim-scale d-4" style="text-align: center; padding: 24px 20px; border: 2px solid rgba(139,90,43,0.3); position: relative; overflow: hidden;">
+                            <div class="anim-float d-3" style="width: 84px; height: 84px; margin: 8px auto 14px; background: linear-gradient(135deg, var(--brown), var(--brown-light)); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; box-shadow: 0 10px 24px rgba(139,90,43,0.35);">
+                                <i class="fa-brands fa-react"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 900; color: var(--brown-dark); margin-bottom: 6px;">أحمد عقيلان</h3>
+                            <p style="font-size: 13px; color: var(--brown); font-weight: 800; margin-bottom: 12px;">Frontend Developer Support</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                                <span style="padding: 4px 12px; background: rgba(139,90,43,0.12); color: var(--brown); border-radius: 12px; font-size: 11px; font-weight: 700;">دعم Frontend</span>
+                                <span style="padding: 4px 12px; background: rgba(139,90,43,0.12); color: var(--brown); border-radius: 12px; font-size: 11px; font-weight: 700;">بناء المكونات</span>
+                                <span style="padding: 4px 12px; background: rgba(139,90,43,0.12); color: var(--brown); border-radius: 12px; font-size: 11px; font-weight: 700;">React.js</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 9 — TECH + SECURITY -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="التقنيات والأمان">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>التقنيات والأمان</h2>
+                    <p>أدوات حديثة نبني بها المنصة، مع طبقات حماية متعددة</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 16px;">
+                    <div class="card anim-up d-1" style="padding: 20px; border-top: 4px solid var(--orange);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                            <i class="fa-solid fa-database" style="color: var(--orange); font-size: 20px;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 15px;">البنية الخلفية</div>
+                        </div>
+                        <ul style="list-style: none; font-size: 13px; color: var(--gray-700); line-height: 2;">
+                            <li><i class="fa-brands fa-laravel" style="color: #DC3545; margin-left: 8px;"></i> Laravel (PHP Framework)</li>
+                            <li><i class="fa-solid fa-database" style="color: #2563EB; margin-left: 8px;"></i> MySQL Database</li>
+                            <li><i class="fa-solid fa-key" style="color: #D97706; margin-left: 8px;"></i> Laravel Sanctum (Auth)</li>
+                            <li><i class="fa-solid fa-server" style="color: var(--orange); margin-left: 8px;"></i> RESTful API موحّد</li>
+                        </ul>
+                    </div>
+
+                    <div class="card anim-up d-2" style="padding: 20px; border-top: 4px solid var(--brown);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                            <i class="fa-solid fa-desktop" style="color: var(--brown); font-size: 20px;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 15px;">واجهة الويب</div>
+                        </div>
+                        <ul style="list-style: none; font-size: 13px; color: var(--gray-700); line-height: 2;">
+                            <li><i class="fa-brands fa-react" style="color: #0EA5E9; margin-left: 8px;"></i> React.js</li>
+                            <li><i class="fa-brands fa-bootstrap" style="color: #7C3AED; margin-left: 8px;"></i> Bootstrap RTL</li>
+                            <li><i class="fa-solid fa-text-height" style="color: var(--orange); margin-left: 8px;"></i> خط Cairo العربي</li>
+                            <li><i class="fa-solid fa-mobile-screen" style="color: var(--brown); margin-left: 8px;"></i> Responsive Design</li>
+                        </ul>
+                    </div>
+
+                    <div class="card anim-up d-3" style="padding: 20px; border-top: 4px solid var(--teal);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                            <i class="fa-solid fa-mobile-retro" style="color: var(--teal); font-size: 20px;"></i>
+                            <div style="font-weight: 900; color: var(--brown-dark); font-size: 15px;">الموبايل والخدمات</div>
+                        </div>
+                        <ul style="list-style: none; font-size: 13px; color: var(--gray-700); line-height: 2;">
+                            <li><i class="fa-solid fa-bolt" style="color: #06B6D4; margin-left: 8px;"></i> Flutter (Android + iOS)</li>
+                            <li><i class="fa-solid fa-database" style="color: #DC3545; margin-left: 8px;"></i> SQLite (Offline Cache)</li>
+                            <li><i class="fa-solid fa-bell" style="color: #EAB308; margin-left: 8px;"></i> Firebase FCM</li>
+                            <li><i class="fa-brands fa-git-alt" style="color: var(--orange); margin-left: 8px;"></i> Git Flow</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card anim-up d-4" style="padding: 22px; border-top: 4px solid var(--green); background: linear-gradient(135deg, rgba(40,167,69,0.05), rgba(40,167,69,0.01));">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 44px; height: 44px; background: linear-gradient(135deg, var(--green), #4FCB6E); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 900; color: var(--green); font-size: 16px;">الأمان في كل خطوة</div>
+                            <div style="font-size: 12px; color: var(--gray-500); font-weight: 600;">كيف نحمي المستخدم وبياناته</div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+                        <div class="anim-right d-1" style="padding: 14px; background: var(--white); border-radius: 12px; border: 1px solid rgba(40,167,69,0.2);">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <i class="fa-solid fa-right-to-bracket" style="color: var(--green); font-size: 14px;"></i>
+                                <span style="font-weight: 900; color: var(--brown-dark); font-size: 13px;">عند تسجيل الدخول</span>
+                            </div>
+                            <p style="font-size: 12px; color: var(--gray-700); line-height: 1.7;">كلمات مرور مشفّرة + جلسات آمنة + حماية من محاولات الاختراق المتكررة</p>
+                        </div>
+
+                        <div class="anim-right d-2" style="padding: 14px; background: var(--white); border-radius: 12px; border: 1px solid rgba(40,167,69,0.2);">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <i class="fa-solid fa-id-card" style="color: var(--green); font-size: 14px;"></i>
+                                <span style="font-weight: 900; color: var(--brown-dark); font-size: 13px;">توثيق الهوية</span>
+                            </div>
+                            <p style="font-size: 12px; color: var(--gray-700); line-height: 1.7;">الوثائق مشفّرة تماماً، ولا تصل إليها إلا الإدارة المختصة، وتُحذف بعد التحقق</p>
+                        </div>
+
+                        <div class="anim-right d-3" style="padding: 14px; background: var(--white); border-radius: 12px; border: 1px solid rgba(40,167,69,0.2);">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <i class="fa-solid fa-hand-holding-heart" style="color: var(--green); font-size: 14px;"></i>
+                                <span style="font-weight: 900; color: var(--brown-dark); font-size: 13px;">طلبات المساعدة</span>
+                            </div>
+                            <p style="font-size: 12px; color: var(--gray-700); line-height: 1.7;">الفيديو يُشاهد مرة واحدة فقط، وروابط المشاهدة موثقة لمنع التسريب</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 10 — WHY BASMA (3x2 grid) -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="ما يميز بصمة">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>ما الذي يميّز بصمة؟</h2>
+                    <p>مبادئ واضحة تختلف عن أي منصة أخرى</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="grid-3x2">
+                    <div class="card anim-up d-1" style="padding: 22px; border-top: 4px solid var(--orange);">
+                        <div class="anim-float" style="width: 52px; height: 52px; background: rgba(232,122,32,0.12); color: var(--orange); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">الثقة أولاً</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">توثيق هوية + نظام تقييمات = بيئة آمنة للمجتمع.</p>
+                    </div>
+
+                    <div class="card anim-up d-2" style="padding: 22px; border-top: 4px solid var(--teal);">
+                        <div class="anim-float d-1" style="width: 52px; height: 52px; background: rgba(23,162,184,0.12); color: var(--teal); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">خصوصية محكمة</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">البيانات الحساسة مشفّرة، وأرقام التواصل محجوبة عن الزوار.</p>
+                    </div>
+
+                    <div class="card anim-up d-3" style="padding: 22px; border-top: 4px solid var(--purple);">
+                        <div class="anim-float d-2" style="width: 52px; height: 52px; background: rgba(156,39,176,0.12); color: var(--purple); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">مصمّمة لغزة</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">تعمل على الاتصال الضعيف وتدعم الاستخدام دون إنترنت.</p>
+                    </div>
+
+                    <div class="card anim-up d-4" style="padding: 22px; border-top: 4px solid var(--brown);">
+                        <div class="anim-float d-3" style="width: 52px; height: 52px; background: rgba(139,90,43,0.12); color: var(--brown); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">عربي أصيل</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">دعم كامل للغة العربية وواجهة RTL منذ البداية.</p>
+                    </div>
+
+                    <div class="card anim-up d-5" style="padding: 22px; border-top: 4px solid var(--green);">
+                        <div class="anim-float d-4" style="width: 52px; height: 52px; background: rgba(40,167,69,0.12); color: var(--green); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-people-group"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">روح المجتمع</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">لا نبيع ونشتري فقط — نبني مجتمعاً متكافلاً ومترابطاً.</p>
+                    </div>
+
+                    <div class="card anim-up d-6" style="padding: 22px; border-top: 4px solid var(--orange-light);">
+                        <div class="anim-float d-5" style="width: 52px; height: 52px; background: rgba(245,166,35,0.12); color: var(--orange-light); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 style="font-size: 16px; font-weight: 900; color: var(--brown-dark); margin-bottom: 8px;">تجربة سلسة</h3>
+                        <p style="font-size: 13px; color: var(--gray-700); line-height: 1.8;">واجهات بسيطة وسريعة وتفاعلية بمعايير عالمية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 11 — IMPACT / HOPE -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="الأثر والأمل">
+            <div class="slide-header anim-right">
+                <div class="bar"></div>
+                <div>
+                    <h2>نأمل أن...</h2>
+                    <p>الحلم الذي نعمل عليه كل يوم</p>
+                </div>
+            </div>
+
+            <div class="scroll-y">
+                <div class="card anim-scale d-1" style="padding: 32px 24px; position: relative; overflow: hidden; text-align: center;">
+
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;">
+                        <div class="anim-scale" style="position: absolute; top: 0; left: 0; width: 300px; height: 300px; margin: -150px 0 0 -150px; border: 2px solid rgba(232,122,32,0.15); border-radius: 50%; animation: ripple 4s ease-out infinite;"></div>
+                        <div style="position: absolute; top: 0; left: 0; width: 300px; height: 300px; margin: -150px 0 0 -150px; border: 2px solid rgba(232,122,32,0.15); border-radius: 50%; animation: ripple 4s ease-out infinite; animation-delay: 1.3s;"></div>
+                        <div style="position: absolute; top: 0; left: 0; width: 300px; height: 300px; margin: -150px 0 0 -150px; border: 2px solid rgba(232,122,32,0.15); border-radius: 50%; animation: ripple 4s ease-out infinite; animation-delay: 2.6s;"></div>
+                    </div>
+
+                    <div style="position: relative; z-index: 1;">
+                        <div class="anim-float" style="width: 100px; height: 100px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-radius: 30px; display: flex; align-items: center; justify-content: center; color: white; font-size: 42px; box-shadow: 0 16px 40px rgba(232,122,32,0.4);">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+
+                        <h2 style="font-size: clamp(22px, 3.4vw, 32px); font-weight: 900; color: var(--brown-dark); margin-bottom: 16px; line-height: 1.4;">
+                            نأمل أن تجمع بصمة أكبر قدر ممكن من المستخدمين
+                        </h2>
+
+                        <p style="font-size: clamp(14px, 1.6vw, 16px); color: var(--gray-700); line-height: 2; max-width: 720px; margin: 0 auto 24px; font-weight: 500;">
+                            كل مستخدم جديد ينضم إلينا هو بصمة جديدة في مجتمعنا، وكل مساهمة تفتح لنا آفاقاً جديدة لتطوير الفكرة. مع اتساع المجتمع، ستكبر بصمة وتتحوّل من منصة إلى حركة مجتمعية حقيقية.
+                        </p>
+
+                        <div style="display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                            <span class="anim-up d-1" style="padding: 8px 18px; background: rgba(232,122,32,0.1); color: var(--orange); border-radius: 24px; font-size: 13px; font-weight: 800; border: 1px solid rgba(232,122,32,0.25);">
+                                <i class="fa-solid fa-users" style="margin-left: 6px;"></i>
+                                مجتمع متوسّع
+                            </span>
+                            <span class="anim-up d-2" style="padding: 8px 18px; background: rgba(23,162,184,0.1); color: var(--teal); border-radius: 24px; font-size: 13px; font-weight: 800; border: 1px solid rgba(23,162,184,0.25);">
+                                <i class="fa-solid fa-lightbulb" style="margin-left: 6px;"></i>
+                                تطوير مستمر
+                            </span>
+                            <span class="anim-up d-3" style="padding: 8px 18px; background: rgba(40,167,69,0.1); color: var(--green); border-radius: 24px; font-size: 13px; font-weight: 800; border: 1px solid rgba(40,167,69,0.25);">
+                                <i class="fa-solid fa-handshake" style="margin-left: 6px;"></i>
+                                تكافل حقيقي
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SLIDE 12 — CLOSING / Q&A -->
+        <!-- ============================================ -->
+        <section class="slide" data-title="الختام">
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                <div class="card anim-scale" style="text-align: center; padding: 50px 32px; max-width: 700px; width: 100%; border: 2px solid rgba(232,122,32,0.3); background: linear-gradient(135deg, rgba(232,122,32,0.05), rgba(23,162,184,0.03));">
+                    <div class="anim-float" style="width: 100px; height: 100px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); border-radius: 28px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; box-shadow: 0 14px 34px rgba(232,122,32,0.35);">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+
+                    <h1 class="anim-up d-1" style="font-size: clamp(32px, 5vw, 48px); font-weight: 900; color: var(--brown-dark); margin-bottom: 12px; line-height: 1.15;">
+                        شكراً لاستماعكم
+                    </h1>
+
+                    <p class="anim-up d-2" style="font-size: clamp(15px, 1.8vw, 18px); color: var(--orange); font-weight: 800; margin-bottom: 24px;">
+                        معاً لنترك بصمة أمل في مجتمعنا
+                    </p>
+
+                    <div class="anim-up d-3" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: rgba(232,122,32,0.1); border: 2px solid rgba(232,122,32,0.3); border-radius: 16px; color: var(--brown-dark); font-weight: 800; font-size: 15px;">
+                        <i class="fa-solid fa-circle-question" style="color: var(--orange); font-size: 20px;"></i>
+                        نفتح المجال الآن لأسئلتكم واستفساراتكم
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================ -->
+    <!-- FOOTER -->
+    <!-- ============================================ -->
+    <footer>
+        <button class="nav-btn prev" onclick="prevSlide()">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span class="hide-sm">السابقة</span>
+        </button>
+
+        <div class="dots" id="dotsContainer"></div>
+
+        <button class="nav-btn next" onclick="nextSlide()">
+            <span class="hide-sm">التالية</span>
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+    </footer>
+
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const dotsContainer = document.getElementById('dotsContainer');
+    let currentSlide = 0;
+
+    function initPresentation() {
+        dotsContainer.innerHTML = '';
+        slides.forEach((slide, index) => {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (index === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(index);
+            dotsContainer.appendChild(dot);
+        });
+        updateSlideState();
+    }
+
+    function updateSlideState() {
+        slides.forEach((slide, idx) => {
+            if (idx === currentSlide) slide.classList.add('active');
+            else slide.classList.remove('active');
+        });
+
+        slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+        const percent = ((currentSlide + 1) / slides.length) * 100;
+        progressBar.style.width = `${percent}%`;
+
+        Array.from(dotsContainer.children).forEach((dot, idx) => {
+            if (idx === currentSlide) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+
+    function nextSlide() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            updateSlideState();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlideState();
+        }
+    }
+
+    function goToSlide(index) {
+        if (index >= 0 && index < slides.length) {
+            currentSlide = index;
+            updateSlideState();
+        }
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === ' ' || e.key === 'PageDown') nextSlide();
+        else if (e.key === 'ArrowRight' || e.key === 'PageUp') prevSlide();
+        else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+        else if (e.key === 'Escape' && document.fullscreenElement) document.exitFullscreen();
+    });
+
+    document.addEventListener('DOMContentLoaded', initPresentation);
+</script>
+
+</body>
+</html>
